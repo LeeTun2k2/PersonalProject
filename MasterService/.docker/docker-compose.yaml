@@ -1,0 +1,68 @@
+version: '1.0'
+
+services:
+  nginx:
+    image: nginx:alpine
+    restart: always
+    depends_on:
+      - userservice
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/conf.d:/etc/nginx/conf.d
+
+  userservice:
+    image: userservice:latest  
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      MAIL_DISPLAYNAME: ${MAIL_DISPLAYNAME}
+      MAIL_FROM: ${MAIL_FROM}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_USESSL: ${MAIL_USESSL}
+      MAIL_USESTARTTLS: ${MAIL_USESTARTTLS}
+      JWT_KEY: ${JWT_KEY}
+      JWT_ISSUER: ${JWT_ISSUER}
+      JWT_AUDIENCE: ${JWT_AUDIENCE}
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  
