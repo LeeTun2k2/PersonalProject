@@ -4,4 +4,5 @@ namespace UserService.Core.Interfaces;
 public interface IEmailTemplates
 {
   EmailContent BuildMFAContent(string code);
+  EmailContent BuildRegistrationContent(string link);
 }

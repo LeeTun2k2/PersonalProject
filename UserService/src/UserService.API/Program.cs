@@ -2,6 +2,7 @@
 using Serilog.Extensions.Logging;
 using UserService.Application;
 using UserService.Core;
+using UserService.Core.Models.DomainModels;
 using UserService.Core.Models.EmailModels;
 using UserService.Core.Models.TokenModels;
 using UserService.Identity;
@@ -28,6 +29,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 builder.Services.Configure<MailSettingsModel>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.Configure<JwtSettingsModel>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<DomainSettingsModel>(builder.Configuration.GetSection("Domains"));
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddIdentityExtensions(builder.Configuration);

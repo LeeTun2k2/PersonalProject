@@ -22,7 +22,6 @@ public class UserRegistrationModelMapper
     {
       Name = model.Name,
       Email = model.Email,
-      UserName = model.UserName,
       PhoneNumber = model.PhoneNumber
     };
     return result;
